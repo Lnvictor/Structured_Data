@@ -12,7 +12,7 @@ import java.util.*;
 class MedianOfArrays{
 
     public double CalcMedianOfTwo(Vector<Integer> vector, Vector<Integer> vector_2){
-        Vector<Integer> vector_result = new Vector<Integer>(vector.capacity()+vector_2.capacity());
+        Vector<Integer> vector_result = new Vector<Integer>(vector.capacity() + vector_2.capacity());
         
         
         vector_result.addAll(vector);
@@ -28,7 +28,7 @@ class MedianOfArrays{
 
         
         if ((vector_result.indexOf(vector_result.lastElement()) + 1) % 2 == 0){
-            return ((double)vector_result.get(middle) +                                   (double)vector_result.get(middle - 1))/ 2;
+            return ((double)vector_result.get(middle) + (double)vector_result.get(middle - 1))/ 2;
         }
     
         return (double) vector_result.get(middle);
