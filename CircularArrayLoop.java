@@ -56,7 +56,7 @@ public class CircularArrayLoop {
             }
         }
         
-        if((steps.get(position) < 0 && direction.equals("FORWARD")) || (steps.get(position) > 0 &&           direction.equals("BACKWARD"))){
+        if((steps.get(position) < 0 && direction.equals("FORWARD")) || (steps.get(position) > 0 && direction.equals("BACKWARD"))){
             return -1;
         }
 
