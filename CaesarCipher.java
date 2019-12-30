@@ -36,12 +36,12 @@ class CaesarCipher {
     }
 
     public void test_encrypt(){
-        if(!encrypt("ij v", 17).equals("ZA M")){
+        if (!encrypt("ij v", 17).equals("ZA M")){
             System.out.println("Test 1 Failed");
         }
         
 
-        if(!encrypt("abracadabra", 15).equals("PQGPRPSPQGP")){
+        if (!encrypt("abracadabra", 15).equals("PQGPRPSPQGP")){
             System.out.println("Test 2 Failed");
         }
 

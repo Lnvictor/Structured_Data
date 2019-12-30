@@ -28,7 +28,7 @@ public class CircularArrayLoop {
             j = i;
             int count_length = 0;
 
-            while(count_length < nums.capacity() || (steps.get(j) + j) <= 0){
+            while (count_length < nums.capacity() || (steps.get(j) + j) <= 0){
                 j = FindNextPosition(steps, j);
                 
                 if (j == -1){
@@ -56,7 +56,7 @@ public class CircularArrayLoop {
             }
         }
         
-        if((steps.get(position) < 0 && direction.equals("FORWARD")) || (steps.get(position) > 0 && direction.equals("BACKWARD"))){
+        if ((steps.get(position) < 0 && direction.equals("FORWARD")) || (steps.get(position) > 0 && direction.equals("BACKWARD"))){
             return -1;
         }
 
@@ -70,7 +70,7 @@ public class CircularArrayLoop {
             }
         }
         
-        else {
+        else{
             position += steps.get(position);
         }
         
@@ -85,14 +85,14 @@ public class CircularArrayLoop {
 
         assert (!IsCycle(new Vector<Integer>(2){{add(2);add(1);}})) : "Test 1 Failed";
         
-        assert(!IsCycle(new Vector<Integer>(2){{add(2);add(-1);}})) : "Test 2 Failed";
+        assert (!IsCycle(new Vector<Integer>(2){{add(2);add(-1);}})) : "Test 2 Failed";
         
-        assert(IsCycle(new Vector<Integer>(5){{add(2);add(-1);add(1);add(2);add(2);}})) : "Test 3 Failed";
+        assert (IsCycle(new Vector<Integer>(5){{add(2);add(-1);add(1);add(2);add(2);}})) : "Test 3 Failed";
         
 
-        assert(!IsCycle(new Vector<Integer>(5){{add(-2);add(1);add(-1);add(-2);add(-2);}})) : "Test 4 Failed";;
+        assert (!IsCycle(new Vector<Integer>(5){{add(-2);add(1);add(-1);add(-2);add(-2);}})) : "Test 4 Failed";;
 
-        assert(IsCycle(new Vector<Integer>(5){{add(2);add(3);add(1);add(1);add(2);}})) : "Test 5 Failed";
+        assert (IsCycle(new Vector<Integer>(5){{add(2);add(3);add(1);add(1);add(2);}})) : "Test 5 Failed";
         
         System.out.println("Tests finish");
     }
