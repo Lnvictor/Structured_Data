@@ -1,3 +1,11 @@
+/**
+ * Caesar Cipher Implementation
+ * 
+ * 
+ * @author: Victor Pereira
+ * @version: 29/12/2019
+ */
+
 class CaesarCipher {
 
     private String ALPHABET;
@@ -9,15 +17,15 @@ class CaesarCipher {
     
     public String encrypt(String message, int key){
         
-        StringBuilder ENCRYPTED_ALPHABET = new StringBuilder();
-        ENCRYPTED_ALPHABET.append(ALPHABET.substring(key) + ALPHABET.substring(0, key));
+        StringBuilder shifted_alphabet = new StringBuilder();
+        shifted_alphabet.append(ALPHABET.substring(key) + ALPHABET.substring(0, key));
         
         message = message.toUpperCase();
         String encrypted_message = "";
 
         for (char a : message.toCharArray()){
             if (ALPHABET.indexOf(a) != -1)
-                encrypted_message += ENCRYPTED_ALPHABET.charAt(ALPHABET.indexOf(a));
+                encrypted_message += shifted_alphabet.charAt(ALPHABET.indexOf(a));
             else
                 encrypted_message += a;
 
