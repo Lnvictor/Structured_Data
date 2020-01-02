@@ -11,7 +11,7 @@ class CaesarCipher {
 
     private String ALPHABET;
 
-    CaesarCipher(){
+    public CaesarCipher(){
         ALPHABET = "abcdefghijklmnopqrstuvwxyz";
     }
 
