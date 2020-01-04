@@ -1,7 +1,6 @@
 /**
  * This program is a generator of random Storys
  * 
- * Its a KISS!!!!
  * 
  * @author: Victor Pereira
  * @version: 02/01/2020
