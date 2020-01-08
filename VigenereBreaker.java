@@ -4,19 +4,17 @@
  * @author: Victor Pereira
  * @version: 06/01/2020
 / */
-import edu.duke.FileResource;
+import edu.duke.*;
+import java.io.File;
 import java.lang.*;
 import java.util.*;
+
 public class VigenereBreaker {
     
-    private char mostCommon;
     private String message;
-    private CaesarCracker cracker;
 
-    public VigenereBreaker(String Message, char mostCommon){
+    public VigenereBreaker(String Message){
         this.message = Message;
-        this.mostCommon = mostCommon;
-        this.cracker= new CaesarCracker(mostCommon);
     }
 
     public String sliceString(String Message, int whichSlice, int totalSlices){
@@ -31,6 +29,7 @@ public class VigenereBreaker {
     }
 
     public int[] tryKeyLength(String encrypted, int klength, char mostCommon){
+        CaesarCracker cracker = new CaesarCracker(mostCommon);
         ArrayList<String> MySlices = new ArrayList<String>();
         int[] keys = new int[klength];
         
@@ -42,15 +41,36 @@ public class VigenereBreaker {
         return keys;
     }
 
-    public void breakVigenere(){        
-        String file_path = "/home/victor/Structured_Data/dictionaries";
+    public char mostCommonCharIn(HashSet<String> dictionary){
+        HashMap<Character, Integer> freqs = new HashMap<Character, Integer>();
+        char mostCommon = 'e';
 
-        if(this.mostCommon == 'a'){
-            file_path += "/Portuguese";
+        for(String word : dictionary){
+            char[] word_array = word.toLowerCase().toCharArray();
+            for(int k = 0; k < word_array.length; k++){
+                if(!freqs.containsKey(word_array[k])){
+                    freqs.put(word_array[k], 1);
+                }
+                else{
+                    freqs.put(word_array[k], freqs.get(word_array[k]) + 1);
+                }
+                
+                if(k == 0){
+                    mostCommon = word_array[k];
+                }
+                else if(freqs.get(word_array[k]) > freqs.get(mostCommon)){
+                    mostCommon = word_array[k];
+                }
+            }
         }
-        else if(this.mostCommon == 'e'){
-            file_path += "/English";
-        }
+
+
+
+        return mostCommon;
+    }
+
+    public void breakVigenere(){        
+        String file_path = "/home/victor/Structured_Data/dictionaries/English";
         
         boolean isRigth;
         String decrypted_message = "";
@@ -66,14 +86,10 @@ public class VigenereBreaker {
             dictionary.add(word);
         }
 
-        // int[] key = tryKeyLength(this.message, 4, 'e');
-        // VigenereCipher c = new VigenereCipher(key);
-        // System.out.println(c.decrypt(this.message));
-
         for(int k = 1; k < 96; k++){
             isRigth = true;
             
-            int[] key = tryKeyLength(this.message, k, this.mostCommon);
+            int[] key = tryKeyLength(this.message, k, 'e');
             VigenereCipher c = new VigenereCipher(key);
             decrypted_message = c.decrypt(this.message).toLowerCase();
             strs.add(decrypted_message);
@@ -100,29 +116,83 @@ public class VigenereBreaker {
 
     }
 
-    public void breakVigenere(int keylength){
-        String file_path = "/home/victor/Structured_Data/dictionaries";
+    public String breakForLanguage(String encrypted, HashSet<String> dictionary){
+        boolean isRigth;
+        String decrypted_message = "";        
+        ArrayList<String> strs = new ArrayList<String>();
 
-        if(this.mostCommon == 'a'){
-            file_path += "/Portuguese";
+        int[] count = new int[96];
+        int max = 0;
+        
+
+        for(int k = 1; k < 96; k++){
+            isRigth = true;
+            
+            int[] key = tryKeyLength(this.message, k, mostCommonCharIn(dictionary));
+            VigenereCipher c = new VigenereCipher(key);
+            decrypted_message = c.decrypt(this.message).toLowerCase();
+            strs.add(decrypted_message);
+            String[] l = decrypted_message.split("\\W");
+
+            for(String word : l){
+                if(!word.isEmpty()){
+                    String str = word.substring(0, 1) + word.substring(1);
+                    if(dictionary.contains(word) && dictionary.contains(str)){
+                        count[k-1]++;
+                    }
+
+                }
+            }
         }
-        else if(this.mostCommon == 'e'){
-            file_path += "/English";
+
+        for(int k = 1; k < 26; k++){
+            if(count[k] > count[max]){
+                max = k;
+            }
         }
-        int[] key = tryKeyLength(this.message, keylength, this.mostCommon);
-        VigenereCipher c = new VigenereCipher(key);
-        String decrypted_message = c.decrypt(this.message).toLowerCase();
-        System.out.println(decrypted_message);
+
+        return strs.get(max);
     }
+
+    public void breakforAllLangs(String encrypted, HashMap<String, HashSet<String>> languages){
+        
+        HashSet<String> freqs = new HashSet<String>();
+        
+        for(HashSet<String> dictionary : languages.values()){
+            freqs.add(breakForLanguage(encrypted, dictionary));
+        }
+
+        for(String el : freqs){
+            System.out.println(el);
+        }
+    }
+
     
+    public void test_Break() {
+        DirectoryResource directory = new DirectoryResource();
+        HashMap<String, HashSet<String>> languages = new HashMap<String, HashSet<String>>();
+        
+        for(File file : directory.selectedFiles()){
+            FileResource file_ = new FileResource(file);
+            HashSet<String> a = new HashSet<String>();
+            
+            for(String word : file_.words()){
+                if(!a.contains(word))
+                a.add(word);
+            }
+            
+            languages.put(file.getName(), a);
+        }
+        
+        
+        breakforAllLangs(message, languages);
+
+    }      
+
     public static void main(String[] args) {
         FileResource file = new FileResource("/home/victor/Structured_Data/messages/secretmessage1.txt");
-        FileResource file_2 = new FileResource("/home/victor/Structured_Data/messages/osLusiadas.txt");
-        
-        VigenereBreaker c = new VigenereBreaker(file.asString(), 'e');
-        VigenereBreaker d = new VigenereBreaker(file_2.asString(), 'a');
-        
-        c.breakVigenere();
-        d.breakVigenere();
-    }       
+        VigenereBreaker breaker = new VigenereBreaker(file.asString());
+        breaker.test_Break();
+    }
+
 }
