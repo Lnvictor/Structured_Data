@@ -1,4 +1,3 @@
-import edu.duke.*;
 
 public class CaesarCipher {
     private String alphabet;
@@ -48,6 +47,7 @@ public class CaesarCipher {
         return transform(input, shiftedAlphabet, alphabet);
     }
     
+    @Override
     public String toString() {
         return "" + theKey;
     }
